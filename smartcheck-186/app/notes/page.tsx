@@ -1,3 +1,4 @@
+//TEST DATA. MUST BE REMOVED LATER WITH THE RESPECTIVE TABLE
 import { createClient } from '@/utils/supabase/server'
 
 export default async function Page() {
