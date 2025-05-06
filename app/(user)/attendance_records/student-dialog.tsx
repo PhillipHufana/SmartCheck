@@ -1,3 +1,4 @@
+//wala patong automatic timestamp
 "use client"
 
 import type React from "react"
@@ -10,19 +11,20 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "./components/ui/textarea"
 import { Switch } from "./components/ui/switch"
 import { useToast } from "@/hooks/use-toast"
+import { supabase } from "@/lib/supabaseClient"
 
 interface StudentData {
-  id: number
-  name: string
-  studentnum: string
-  date_arrived: string
-  time_arrived: string
-  time_course: string
-  adviser: string
-  course_title: string
-  degreeProg: string
-  description: string
-  status: boolean
+  id: number;
+  name: string;
+  studentnum: string;
+  date_arrived: string;
+  time_arrived: string;
+  time_course: string;
+  adviser: string;
+  course_title: string;
+  degreeprog: string;
+  description: string;
+  status: boolean;
 }
 
 const defaultStudentData: StudentData = {
@@ -34,7 +36,7 @@ const defaultStudentData: StudentData = {
   time_course: "",
   adviser: "",
   course_title: "CMSC 186",
-  degreeProg: "",
+  degreeprog: "",
   description: "",
   status: true,
 }
@@ -53,19 +55,43 @@ export default function StudentDialog({ children }: { children: React.ReactNode 
     setStudentData((prev) => ({ ...prev, status: checked }))
   }
 
-  const handleSubmit = () => {
-    // Here you would typically submit the data to your backend
-    console.log("Submitting student data:", studentData)
-
-    toast({
-      title: "Attendance recorded",
-      description: `Successfully recorded attendance for ${studentData.name}`,
-    })
-
-    setOpen(false)
-    // Reset form after submission
-    setStudentData(defaultStudentData)
-  }
+  const handleSubmit = async () => {
+    if (!studentData.name || !studentData.studentnum) {
+      toast({ title: "Validation Error", description: "Name and Student Number are required" });
+      return;
+    }
+  
+    const { id, ...submitData } = studentData;
+  
+    try {
+      const { data, error } = await supabase
+      .from('attendee')
+      .insert([submitData])
+      .select();
+    
+    if (error) {
+      console.error('Supabase Error:', {
+        message: error.message,
+        code: error.code,
+        details: error.details
+      });
+      toast({ 
+        title: "Submission Failed", 
+        description: `Error: ${error.message} (Code: ${error.code})` 
+      });
+      return;
+    }
+  
+      setOpen(false);
+      setStudentData(defaultStudentData);
+    } catch (err) {
+      console.error('Unexpected Error:', err);
+      toast({ 
+        title: "Submission Failed", 
+        description: "An unexpected error occurred. Check console for details." 
+      });
+    }
+  };
 
   return (
     <>
@@ -122,9 +148,9 @@ export default function StudentDialog({ children }: { children: React.ReactNode 
                 <Input
                   id="time_course"
                   name="time_course"
+                  type="time"
                   value={studentData.time_course}
                   onChange={handleChange}
-                  placeholder="9:00 AM - 10:30 AM"
                 />
               </div>
               <div className="space-y-2">
@@ -151,11 +177,11 @@ export default function StudentDialog({ children }: { children: React.ReactNode 
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="degreeProg">Degree Program</Label>
+                <Label htmlFor="degreeprog">Degree Program</Label>
                 <Input
-                  id="degreeProg"
-                  name="degreeProg"
-                  value={studentData.degreeProg}
+                  id="degreeprog"
+                  name="degreeprog"
+                  value={studentData.degreeprog}
                   onChange={handleChange}
                   placeholder="BS Computer Science"
                 />
