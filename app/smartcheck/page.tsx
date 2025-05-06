@@ -37,7 +37,7 @@ export default async function Home() {
               <CardDescription>Choose whether you're a student or teacher</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
-              <Link href="/student"><Button className="hover:bg-green-100 gap-2 hover:text-green-700 hover:border-green-300 w-full">
+              <Link href="/attendance_records"><Button className="hover:bg-green-100 gap-2 hover:text-green-700 hover:border-green-300 w-full">
                 <GraduationCap className="h-6 w-6 " />I am a Student
               </Button> </Link>
 
