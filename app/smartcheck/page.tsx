@@ -41,7 +41,7 @@ export default async function Home() {
                 <GraduationCap className="h-6 w-6 " />I am a Student
               </Button> </Link>
 
-              <Link href="/admin"><Button className="hover:bg-green-100 gap-2 hover:text-green-700 hover:border-green-300 w-full"> 
+              <Link href="/attendee_report"><Button className="hover:bg-green-100 gap-2 hover:text-green-700 hover:border-green-300 w-full"> 
                 <School className="h-6 w-6" />I am a Teacher
               </Button> </Link>
             </CardContent>
