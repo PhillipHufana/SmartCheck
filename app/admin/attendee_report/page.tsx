@@ -22,26 +22,36 @@ export default Incidentreport; */
 
 import { AttendeeDataTable } from '@/app/admin/attendee_report/components/attendee-data-table'
 import { Attendee, attendee_columns } from "@/app/admin/attendee_report/components/attendee-columns"
-
+import { supabase } from '@/lib/supabaseClient';
 async function getData(): Promise<Attendee[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: 1,
-      name: "Phillip Hufana",
-      studentnum: "2022-06863",
-      date_arrived: "May 5, 2025",
-      time_arrived: "12:00 PM",
-      time_course: "11:30 PM",
-      adviser: "Vicente Calag",
-      course_title: "CMSC 186",
-      degreeProg: "BSCS",
-      description: "Heavy Rainfall",
-      status: false,
-    },
-    // ...
-  ]
+  const { data, error } = await supabase
+    .from('attendee') // Replace with your Supabase table name
+    .select('*');
+  
+  if (error) {
+    console.error('Error fetching data:', error);
+    return [];
+  }
+  
+  return data as Attendee[];
 }
+//   return [
+//     {
+//       id: 1,
+//       name: "Phillip Hufana",
+//       studentnum: "2022-06863",
+//       date_arrived: "May 5, 2025",
+//       time_arrived: "12:00 PM",
+//       time_course: "11:30 PM",
+//       adviser: "Vicente Calag",
+//       course_title: "CMSC 186",
+//       degreeProg: "BSCS",
+//       description: "Heavy Rainfall",
+//       status: false,
+//     },
+//     // ...
+//   ]
+// }
  
 export default async function DemoPage() {
   const data = await getData()
