@@ -20,8 +20,8 @@ const Incidentreport = async () => {
  
 export default Incidentreport; */
 
-import { AttendeeDataTable } from '@/app/admin/attendee_report/components/attendee-data-table'
-import { Attendee, attendee_columns } from "@/app/admin/attendee_report/components/attendee-columns"
+import { AttendeeDataTable } from '@/app/(admin)/attendee_report/components/attendee-data-table'
+import { Attendee, attendee_columns } from "@/app/(admin)/attendee_report/components/attendee-columns"
 import { supabase } from '@/lib/supabaseClient';
 async function getData(): Promise<Attendee[]> {
   const { data, error } = await supabase
