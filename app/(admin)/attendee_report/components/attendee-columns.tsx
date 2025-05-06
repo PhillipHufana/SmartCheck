@@ -47,7 +47,7 @@ export type Attendee = {
       header: "Course Title",
     },
     {
-      accessorKey: "degreeProg",
+      accessorKey: "degreeprog",
       header: "Program",
     },
     {
