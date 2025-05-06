@@ -7,9 +7,22 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link';
 
+import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
+import { createClient } from "@/utils/supabase/server";
+import { InfoIcon } from "lucide-react";
+import { redirect } from "next/navigation";
+
 
 export default async function Home() {
-  
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return redirect("/sign-in");
+  }
   return (
     <>
         <div className="flex h-64 flex-col items-center justify-center">

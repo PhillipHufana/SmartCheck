@@ -1,9 +1,19 @@
+import Hero from "@/components/hero";
+import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
+import SignUpUserSteps from "@/components/tutorial/sign-up-user-steps";
+import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+import { GraduationCap, School } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import Link from 'next/link';
+
 import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
 import { createClient } from "@/utils/supabase/server";
 import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 
-export default async function ProtectedPage() {
+
+export default async function Home() {
   const supabase = await createClient();
 
   const {
@@ -13,26 +23,30 @@ export default async function ProtectedPage() {
   if (!user) {
     return redirect("/sign-in");
   }
-
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
+    <>
+        <div className="flex h-64 flex-col items-center justify-center">
+        <h1 className="text-4xl font-bold">Welcome to SmartCheck!</h1>
+        <h3 className="text-2xl font-semibold text-gray-600">The fastest way to track and monitor class attendance.</h3>
         </div>
-      </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          {JSON.stringify(user, null, 2)}
-        </pre>
-      </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
-      </div>
-    </div>
+
+        <div className="flex h-40 flex-col  items-center justify-center">
+          <Card className="w-full max-w-md">
+            <CardHeader className="text-center">
+              <CardTitle>Select your role</CardTitle>
+              <CardDescription>Choose whether you're a student or teacher</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              <Link href="/student"><Button className="hover:bg-green-100 gap-2 hover:text-green-700 hover:border-green-300 w-full">
+                <GraduationCap className="h-6 w-6 " />I am a Student
+              </Button> </Link>
+
+              <Link href="/admin"><Button className="hover:bg-green-100 gap-2 hover:text-green-700 hover:border-green-300 w-full"> 
+                <School className="h-6 w-6" />I am a Teacher
+              </Button> </Link>
+            </CardContent>
+        </Card>
+        </div>
+    </>
   );
 }
