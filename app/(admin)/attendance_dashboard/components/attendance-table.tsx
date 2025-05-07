@@ -71,7 +71,6 @@ export function AttendanceTable() {
             <TableRow>
               <TableHead>Date</TableHead>
               <TableHead>Time of Course</TableHead>
-              <TableHead>Time of Late</TableHead>
               <TableHead>Course Title</TableHead>
               <TableHead>Creator</TableHead>
               <TableHead></TableHead>
@@ -84,7 +83,6 @@ export function AttendanceTable() {
               <TableRow key={item.attendance_id}>
                 <TableCell>{item.attendance_date}</TableCell>
                 <TableCell>{item.course_time}</TableCell>
-                <TableCell>{item.lateTime}</TableCell>
                 <TableCell>{item.course_title}</TableCell>
                 <TableCell>{item.creator}</TableCell>
                 <TableCell>
