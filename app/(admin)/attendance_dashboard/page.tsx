@@ -1,11 +1,10 @@
+import { Suspense } from "react";
+import Link from "next/link";
+import { Check, Plus, List } from "lucide-react";
 
-import { Suspense } from "react"
-import Link from "next/link"
-import { Check, Plus } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { AttendanceTable } from "./components/attendance-table"
-import { AttendanceTableSkeleton } from "./components/attendance-table-skeleton"
+import { Button } from "@/components/ui/button";
+import { AttendanceTable } from "./components/attendance-table";
+import { AttendanceTableSkeleton } from "./components/attendance-table-skeleton";
 
 export default function Dashboard() {
   return (
@@ -27,8 +26,12 @@ export default function Dashboard() {
       <main className="flex-1 bg-white">
         <div className="container px-4 py-6 md:px-6 md:py-8">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold tracking-tight">Attendance Dashboard</h1>
-            <p className="text-muted-foreground">Create and Manage available Attendance reports</p>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Attendance Dashboard
+            </h1>
+            <p className="text-muted-foreground">
+              Create and Manage available Attendance reports
+            </p>
           </div>
           <div className="mb-4 flex justify-end">
             <Button asChild className="bg-emerald-500 hover:bg-emerald-600">
@@ -37,6 +40,14 @@ export default function Dashboard() {
                 Create Attendance
               </Link>
             </Button>
+            <div className="ml-2">
+              <Button asChild className="bg-emerald-500 hover:bg-emerald-600">
+                <Link href="/attendee_report">
+                  <List className="mr-2 h-4 w-4" />
+                  Attendee Report
+                </Link>
+              </Button>
+            </div>
           </div>
           <Suspense fallback={<AttendanceTableSkeleton />}>
             <AttendanceTable />
@@ -44,5 +55,5 @@ export default function Dashboard() {
         </div>
       </main>
     </div>
-  )
+  );
 }

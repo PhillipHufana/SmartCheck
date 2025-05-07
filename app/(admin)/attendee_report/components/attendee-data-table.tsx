@@ -1,6 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
+import Link from "next/link"; // Import Link for navigation
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,7 +12,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -20,24 +21,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Input } from "@/components/ui/input"
-
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button"; // Import the Button component
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
 
 export function AttendeeDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
   const table = useReactTable({
     data,
     columns,
@@ -50,21 +50,25 @@ export function AttendeeDataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
-  })
+  });
 
-return (
+  return (
     <div>
-        <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">Attendee Reports</h1>
-            <p className="mt-2 text-md text-gray-600 dark:text-gray-400">
-                View and Manage all Attendee submissions.
-            </p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+          Attendee Reports
+        </h1>
+        <p className="mt-2 text-md text-gray-600 dark:text-gray-400">
+          View and Manage all Attendee submissions.
+        </p>
+      </div>
 
-        <div className="flex items-center justify-between py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Search by Course Title"
-          value={(table.getColumn("course_title")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("course_title")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("course_title")?.setFilterValue(event.target.value)
           }
@@ -72,50 +76,64 @@ return (
         />
       </div>
 
-        <div className="overflow-y-scroll max-h-96 rounded-md border mt-8">
-          <Table>
-              <TableHeader className="bg-gray-100">
-              {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                      return (
-                      <TableHead key={header.id}>
-                          {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                              )}
-                      </TableHead>
-                      )
-                  })}
-                  </TableRow>
-              ))}
-              </TableHeader>
-              <TableBody>
-              {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                  <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                  >
-                      {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                      ))}
-                  </TableRow>
-                  ))
-              ) : (
-                  <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
-                      No results.
-                  </TableCell>
-                  </TableRow>
-              )}
-              </TableBody>
-          </Table>
-        </div>
+      <div className="overflow-y-scroll max-h-96 rounded-md border mt-4">
+        <Table>
+          <TableHeader className="bg-gray-100">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      {/* Back Button */}
+      <div className="mt-6 flex justify-end">
+        {" "}
+        {/* Added margin-bottom and flex for alignment */}
+        <Link href="/attendance_dashboard" passHref>
+          <Button variant="outline">&larr; Back to Dashboard</Button>
+        </Link>
+      </div>
     </div>
-  )
+  );
 }
