@@ -24,7 +24,7 @@ interface StudentData {
   course_title: string;
   degreeprog: string;
   description: string;
-  status: boolean;
+  status: "on-time" | "late" | "absent"; 
 }
 
 const defaultStudentData: StudentData = {
@@ -38,7 +38,7 @@ const defaultStudentData: StudentData = {
   course_title: "CMSC 186",
   degreeprog: "",
   description: "",
-  status: true,
+  status: "on-time",
 }
 
 export default function StudentDialog({ children }: { children: React.ReactNode }) {
@@ -46,14 +46,10 @@ export default function StudentDialog({ children }: { children: React.ReactNode 
   const [studentData, setStudentData] = useState<StudentData>(defaultStudentData)
   const { toast } = useToast()
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setStudentData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSwitchChange = (checked: boolean) => {
-    setStudentData((prev) => ({ ...prev, status: checked }))
-  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setStudentData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async () => {
     if (!studentData.name || !studentData.studentnum) {
@@ -201,8 +197,18 @@ export default function StudentDialog({ children }: { children: React.ReactNode 
             </div>
 
             <div className="flex items-center space-x-2">
-              <Switch id="status" checked={studentData.status} onCheckedChange={handleSwitchChange} />
-              <Label htmlFor="status">Present</Label>
+              <Label htmlFor="status">Status</Label>
+              <select
+                id="status"
+                name="status"
+                value={studentData.status}
+                onChange={handleChange}
+                className="border rounded px-3 py-2"
+              >
+                <option value="on-time">On-Time</option>
+                <option value="late">Late</option>
+                <option value="absent">Absent</option>
+              </select>
             </div>
           </div>
           <DialogFooter>

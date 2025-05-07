@@ -85,7 +85,7 @@ const AttendeeActions: FC<{ attendee: Attendee }> = ({ attendee }) => {
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
-                <Button className="up-primary-red" onClick={() => handleStatus("On time")}>Mark as On time</Button>
+                <Button className="up-primary-red" onClick={() => handleStatus("on-time")}>Mark as On time</Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>
@@ -105,7 +105,7 @@ const AttendeeActions: FC<{ attendee: Attendee }> = ({ attendee }) => {
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
-                <Button className="up-primary-red" onClick={() => handleStatus("Late")}>Mark as Late</Button>
+                <Button className="up-primary-red" onClick={() => handleStatus("late")}>Mark as Late</Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>
@@ -125,7 +125,7 @@ const AttendeeActions: FC<{ attendee: Attendee }> = ({ attendee }) => {
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
-                <Button className="up-primary-red" onClick={() => handleStatus("Absent")}>Mark as Absent</Button>
+                <Button className="up-primary-red" onClick={() => handleStatus("absent")}>Mark as Absent</Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>
@@ -202,21 +202,21 @@ export const attendee_columns: ColumnDef<Attendee>[] = [
       let statusLabel = "";
 
       switch (status) {
-        case "On time":
+        case "on-time":
           statusClass = "bg-green-100 text-green-800";
           statusLabel = "On time";
           break;
-        case "Late":
+        case "late":
           statusClass = "bg-yellow-100 text-yellow-800";
           statusLabel = "Late";
           break;
-        case "Absent":
+        case "absent":
           statusClass = "bg-red-100 text-red-800";
           statusLabel = "Absent";
           break;
         default:
           statusClass = "bg-blue-100 text-blue-800";
-          statusLabel = "Pending";
+          statusLabel = "on-time";
           break;
       }
 
