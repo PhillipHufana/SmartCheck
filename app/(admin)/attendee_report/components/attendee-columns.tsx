@@ -21,7 +21,7 @@ export type Attendee = {
   id: number;
   name: string;
   studentnum: string;
-  date: string;
+  date_arrived: Date;
   time_arrived: string;
   time_course: string;
   adviser: string;
@@ -166,7 +166,7 @@ export const attendee_columns: ColumnDef<Attendee>[] = [
     header: "Student No.",
   },
   {
-    accessorKey: "date",
+    accessorKey: "date_arrived",
     header: "Date",
   },
   {
