@@ -132,7 +132,7 @@ const AttendeeActions: FC<{ attendee: Attendee }> = ({ attendee }) => {
         </Dialog>
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="px-8 w-60 mt-2 up-primary-red" onClick={handleDelete}>
+            <Button className="px-8 w-60 mt-2 up-primary-red">
               Delete
             </Button>
           </DialogTrigger>
@@ -145,7 +145,7 @@ const AttendeeActions: FC<{ attendee: Attendee }> = ({ attendee }) => {
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
-                <Button className="up-primary-red">Delete</Button>
+                <Button className="up-primary-red" onClick={handleDelete}>Delete</Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>
