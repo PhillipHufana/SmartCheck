@@ -63,10 +63,10 @@ return (
 
         <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Search by Student Name"
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          placeholder="Search by Course Title"
+          value={(table.getColumn("course_title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("course_title")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
