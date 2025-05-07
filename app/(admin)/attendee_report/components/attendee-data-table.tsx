@@ -128,10 +128,10 @@ export function AttendeeDataTable<TData, TValue>({
       </div>
       {/* Back Button */}
       <div className="mt-6 flex justify-end">
-        {" "}
-        {/* Added margin-bottom and flex for alignment */}
         <Link href="/attendance_dashboard" passHref>
-          <Button variant="outline">&larr; Back to Dashboard</Button>
+          <Button variant="outline" className=" hover:bg-emerald-500">
+            &larr; Back to Dashboard
+          </Button>
         </Link>
       </div>
     </div>
