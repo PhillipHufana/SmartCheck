@@ -4,6 +4,7 @@ import React, { ReactNode } from "react";
 import "@/app/globals.css";
 import { Inter } from "next/font/google";
 import ToasterClient from "@/components/toasterClient";
+import { Navbar } from "@/components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +21,13 @@ export default function RootLayout({
   children: ReactNode;
 }) {
   return (
+    <>
+    <Navbar/>
+    {}
     <div className="min-h-screen">
       {children}
       <ToasterClient />
     </div>
+    </>
   );
 }
