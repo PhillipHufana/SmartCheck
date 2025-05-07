@@ -12,13 +12,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
+import { supabase } from "@/lib/supabaseClient"
 
 export default function CreateAttendance() {
   const router = useRouter()
   const { toast } = useToast()
   const [formData, setFormData] = useState({
     attendance_date: "",
-    courseTime: "",
+    course_time: "",
     // lateTime: "",
     course_title: "",
     creator: "",
@@ -29,19 +30,35 @@ export default function CreateAttendance() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // Here you would typically send the data to your API/database
-    console.log("Form submitted:", formData)
-
-    toast({
-      title: "Attendance record created",
-      description: "The attendance record has been successfully created.",
-    })
-
-    router.push("/attendance_dashboard")
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    try {
+      // Insert data into Supabase
+      const { error } = await supabase
+        .from("attendance_record") // Ensure this matches your Supabase table name
+        .insert([formData]);
+  
+      if (error) {
+        throw error;
+      }
+  
+      // Success notification and redirect
+      toast({
+        title: "Attendance record created",
+        description: "The attendance record has been successfully saved.",
+      });
+  
+      router.push("/attendance_dashboard");
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      toast({
+        title: "Error",
+        description: "Failed to create attendance record",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -79,7 +96,7 @@ export default function CreateAttendance() {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="attendance_date">Attendance Date</Label>
-                    <Input id="attendance_date" name="attendance_date" type="attendance_date" value={formData.attendance_date} onChange={handleChange} required />
+                    <Input id="attendance_date" name="attendance_date" type="date" value={formData.attendance_date} onChange={handleChange} required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="course_title">Course Title</Label>
@@ -93,12 +110,12 @@ export default function CreateAttendance() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="courseTime">Time of Course</Label>
+                    <Label htmlFor="course_time">Time of Course</Label>
                     <Input
-                      id="courseTime"
-                      name="courseTime"
+                      id="course_time"
+                      name="course_time"
                       type="time"
-                      value={formData.courseTime}
+                      value={formData.course_time}
                       onChange={handleChange}
                       required
                     />
