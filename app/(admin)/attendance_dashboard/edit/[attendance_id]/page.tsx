@@ -22,7 +22,7 @@ import { supabase } from "@/lib/supabaseClient";
 export default function EditAttendance() {
   const router = useRouter();
   const { toast } = useToast();
-  const { attendance_id } = useParams(); // ✅ Automatically unwrapped by useParams
+  const { attendance_id } = useParams(); 
 
   const [formData, setFormData] = useState({
     attendance_date: "",
@@ -40,7 +40,7 @@ export default function EditAttendance() {
         const { data, error } = await supabase
           .from("attendance_record") // Ensure this matches your Supabase table name
           .select("*")
-          .eq("attendance_id", attendance_id) // ✅ Use correct column name
+          .eq("attendance_id", attendance_id)
           .single();
 
         if (error) throw error;
@@ -89,7 +89,7 @@ export default function EditAttendance() {
       const { error } = await supabase
         .from("attendance_record")
         .update(formData)
-        .eq("attendance_id", attendance_id); // ✅ Use correct column name
+        .eq("attendance_id", attendance_id); 
 
       if (error) throw error;
 
