@@ -17,10 +17,10 @@ export default function CreateAttendance() {
   const router = useRouter()
   const { toast } = useToast()
   const [formData, setFormData] = useState({
-    date: "",
+    attendance_date: "",
     courseTime: "",
-    lateTime: "",
-    courseTitle: "",
+    // lateTime: "",
+    course_title: "",
     creator: "",
   })
 
@@ -78,16 +78,16 @@ export default function CreateAttendance() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="date">Date</Label>
-                    <Input id="date" name="date" type="date" value={formData.date} onChange={handleChange} required />
+                    <Label htmlFor="attendance_date">Attendance Date</Label>
+                    <Input id="attendance_date" name="attendance_date" type="attendance_date" value={formData.attendance_date} onChange={handleChange} required />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="courseTitle">Course Title</Label>
+                    <Label htmlFor="course_title">Course Title</Label>
                     <Input
-                      id="courseTitle"
-                      name="courseTitle"
+                      id="course_title"
+                      name="course_title"
                       placeholder="e.g. CMSC 186"
-                      value={formData.courseTitle}
+                      value={formData.course_title}
                       onChange={handleChange}
                       required
                     />
@@ -103,8 +103,8 @@ export default function CreateAttendance() {
                       required
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lateTime">Time of Late</Label>
+                  {/* <div className="space-y-2">
+                    <Label htmlFor="lateTime">Course Time</Label>
                     <Input
                       id="lateTime"
                       name="lateTime"
@@ -113,7 +113,7 @@ export default function CreateAttendance() {
                       onChange={handleChange}
                       required
                     />
-                  </div>
+                  </div> */}
                   <div className="space-y-2">
                     <Label htmlFor="creator">Creator</Label>
                     <Input
