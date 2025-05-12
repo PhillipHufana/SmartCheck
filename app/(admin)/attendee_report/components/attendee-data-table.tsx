@@ -71,7 +71,7 @@ export function AttendeeDataTable<TData, TValue>({
       setIsLoadingWeather(true);
       setWeatherError(null);
       const apiKey = process.env.NEXT_PUBLIC_WEATHER_KEY;
-      const city = "Digos City"; // Or make this dynamic
+      const city = "Davao City"; // Or make this dynamic
       const units = "metric"; // For Celsius
 
       if (!apiKey) {
