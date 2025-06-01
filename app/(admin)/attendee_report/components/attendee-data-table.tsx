@@ -1,8 +1,8 @@
-"use client";
+""use client";
 
 import * as React from "react";
-import { useState, useEffect } from "react"; // Import useState and useEffect
-import Link from "next/link"; // Import Link for navigation
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,7 +10,6 @@ import {
   SortingState,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -24,66 +23,46 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"; // Import the Button component
+import { Button } from "@/components/ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-// Define a type for the weather data we expect
 interface WeatherData {
   description: string;
   temperature: number;
   city: string;
-  icon?: string; // Optional: for weather icon
+  icon?: string;
 }
 
-export function AttendeeDataTable<TData, TValue>({
+export function AttendeeDataTable<TData extends { attendance_id: string }, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [weatherError, setWeatherError] = useState<string | null>(null);
   const [isLoadingWeather, setIsLoadingWeather] = useState<boolean>(true);
+  const [selectedAttendanceId, setSelectedAttendanceId] = useState<string | null>(null);
 
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    state: {
-      sorting,
-      columnFilters,
-    },
-  });
-
-  // Function to fetch weather data
   useEffect(() => {
     const fetchWeather = async () => {
       setIsLoadingWeather(true);
       setWeatherError(null);
       const apiKey = process.env.NEXT_PUBLIC_WEATHER_KEY;
-      const city = "Davao City"; // Or make this dynamic
-      const units = "metric"; // For Celsius
+      const city = "Davao City";
+      const units = "metric";
 
       if (!apiKey) {
-        console.error(
-          "Weather API key is missing. Please set NEXT_PUBLIC_WEATHER_API_KEY in your .env.local file."
-        );
+        console.error("Weather API key is missing. Please set NEXT_PUBLIC_WEATHER_API_KEY in your .env.local file.");
         setWeatherError("Weather service not configured.");
         setIsLoadingWeather(false);
         return;
       }
 
-      // Example using OpenWeatherMap API
       const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
 
       try {
@@ -97,7 +76,7 @@ export function AttendeeDataTable<TData, TValue>({
           description: data.weather[0].description,
           temperature: Math.round(data.main.temp),
           city: data.name,
-          icon: data.weather[0].icon, // OpenWeatherMap icon code
+          icon: data.weather[0].icon,
         });
       } catch (error) {
         console.error("Failed to fetch weather data:", error);
@@ -112,7 +91,33 @@ export function AttendeeDataTable<TData, TValue>({
     };
 
     fetchWeather();
-  }, []); // Empty dependency array means this runs once when the component mounts
+  }, []);
+
+  const groupedData = React.useMemo(() => {
+    const groups: Record<string, TData[]> = {};
+    data.forEach((item) => {
+      const id = item.attendance_id;
+      if (!groups[id]) groups[id] = [];
+      groups[id].push(item);
+    });
+    return groups;
+  }, [data]);
+
+  const filteredData = selectedAttendanceId ? groupedData[selectedAttendanceId] || [] : [];
+
+  const table = useReactTable({
+    data: filteredData,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
+  });
 
   return (
     <div>
@@ -133,26 +138,18 @@ export function AttendeeDataTable<TData, TValue>({
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-500">
             Weather in {weather?.city || "Davao City"}
           </p>
-          {isLoadingWeather && (
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-500">
-              Loading weather...
-            </p>
-          )}
-          {weatherError && (
-            <p className="mt-1 text-sm text-red-500 dark:text-red-400">
-              {weatherError}
-            </p>
-          )}
+          {isLoadingWeather && <p className="mt-1 text-sm text-gray-500 dark:text-gray-500">Loading weather...</p>}
+          {weatherError && <p className="mt-1 text-sm text-red-500 dark:text-red-400">{weatherError}</p>}
           {weather && !isLoadingWeather && !weatherError && (
             <>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-500 capitalize">
-                {weather.description}, {weather.temperature}°C
+                {weather.description}, {weather.temperature}&deg;C
               </p>
               {weather.icon && (
                 <img
                   src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
                   alt={weather.description}
-                  className="w-12 h-12 inline-block" // Adjust size as needed
+                  className="w-12 h-12 inline-block"
                 />
               )}
             </>
@@ -161,72 +158,72 @@ export function AttendeeDataTable<TData, TValue>({
       </div>
 
       <div className="flex items-center justify-between py-4">
-        <Input
-          placeholder="Search by Course Title"
-          value={
-            (table.getColumn("course_title")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("course_title")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div className="flex gap-2">
+          <Input
+            placeholder="Search by Student Name"
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <select
+            value={selectedAttendanceId ?? ""}
+            onChange={(e) => setSelectedAttendanceId(e.target.value)}
+            className="border p-2 rounded"
+          >
+            <option value="">Select Attendance ID</option>
+            {Object.keys(groupedData).map((id) => (
+              <option key={id} value={id}>
+                {id}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div className="overflow-y-scroll max-h-96 rounded-md border mt-4">
-        <Table>
-          <TableHeader className="bg-gray-100">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
+      {selectedAttendanceId && (
+        <div className="overflow-y-scroll max-h-96 rounded-md border mt-4">
+          <Table>
+            <TableHeader className="bg-gray-100">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      {/* Back Button */}
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+
       <div className="mt-6 flex justify-end">
         <Link href="/attendance_dashboard" passHref>
-          <Button variant="outline" className=" hover:bg-emerald-500">
+          <Button variant="outline" className="hover:bg-emerald-500">
             &larr; Back to Dashboard
           </Button>
         </Link>
