@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import StudentDialog from './student-dialog';
 
 export default function Home() {
+  
   const [attendanceRecords, setAttendanceRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,6 +29,7 @@ export default function Home() {
   }, []);
 
   if (loading) return <div>Loading...</div>;
+  
 
   return (
     <div className="min-h-screen flex flex-col">
