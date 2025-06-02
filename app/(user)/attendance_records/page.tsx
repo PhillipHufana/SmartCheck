@@ -45,10 +45,11 @@ export default function Home() {
                     <div className="space-y-2">
                       <p className="text-sm">Date: {record.attendance_date}</p>
                       <p className="text-sm">Created by: {record.creator}</p>
+                      <p className="text-sm">Attendance ID: {record.attendance_id}</p>
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <StudentDialog>
+                    <StudentDialog attendance_id={record.attendance_id}>
                       <Button className="w-full bg-green-500 hover:bg-green-600">Fill Out</Button>
                     </StudentDialog>
                   </CardFooter>

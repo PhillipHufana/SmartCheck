@@ -56,9 +56,9 @@ async function getData(): Promise<Attendee[]> {
 export default async function DemoPage() {
   const data = await getData()
  
-  return (
-    <div className="container mx-auto py-10">
+ return (
+   <div className="container mx-auto py-10">
       <AttendeeDataTable columns={attendee_columns} data={data} />
-    </div>
+   </div>
   )
 }
