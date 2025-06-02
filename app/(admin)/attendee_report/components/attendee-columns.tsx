@@ -29,6 +29,7 @@ export type Attendee = {
   degreeProg: string;
   description: string;
   status: string;
+  attendace_id: number;
 };
 
 // Functional Component for Actions
