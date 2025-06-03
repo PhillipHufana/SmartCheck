@@ -60,10 +60,16 @@ export default function StudentDialog({
     attendance_id: prop_attendance_id,
   }));
   const [isFetchingDetails, setIsFetchingDetails] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false)
   const { toast } = useToast();
 
+  const getSubmittedKey = (id: number) => `attendance_submitted_${id}`;
   useEffect(() => {
     if (open) {
+      const key = getSubmittedKey(prop_attendance_id); 
+      const submitted = localStorage.getItem(key) === "true"; 
+      setHasSubmitted(submitted); 
+      
       setStudentData({
         ...defaultStudentData,
         name: "",
@@ -207,6 +213,8 @@ export default function StudentDialog({
         title: "Success",
         description: "Attendance submitted successfully.",
       });
+      localStorage.setItem(getSubmittedKey(prop_attendance_id), "true"); 
+      setHasSubmitted(true); 
       setOpen(false);
     } catch (err) {
       console.error("Unexpected Error:", err);
@@ -376,8 +384,9 @@ export default function StudentDialog({
             <Button
               onClick={handleSubmit}
               className="bg-green-500 hover:bg-green-600 text-white"
+              disabled={hasSubmitted}
             >
-              Submit
+              {hasSubmitted ? "Already Submitted" : "Submit"}
             </Button>
           </DialogFooter>
         </DialogContent>
