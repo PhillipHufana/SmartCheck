@@ -52,7 +52,7 @@ export default async function Signup(props: {
           <Input name="lastName" placeholder="Doe" required />
 
           {/* Student Number */}
-          <Label htmlFor="studentnum">Student Number</Label>
+          <Label htmlFor="studentnum">ID Number</Label>
           <Input
             id="studentnum"
             name="studentnum"
@@ -77,7 +77,6 @@ export default async function Signup(props: {
             placeholder="e.g., 1, 2, 3"
             min={1}
             max={5}
-            required
           />
 
           {/* Submit Button */}
